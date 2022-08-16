@@ -5,4 +5,5 @@ fuck.sh
 *.cache
 *.tmp
 
+*.pub
 .DS_Store
