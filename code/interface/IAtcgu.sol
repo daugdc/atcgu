@@ -1,6 +1,7 @@
 pragma solidity ^0.8.0;
 
-interface IAtcgu{
+interface IERC1155_ATCGU is IERC20, IERC721, IERC1155
+{
 
 
     /**
@@ -8,37 +9,62 @@ interface IAtcgu{
      * 
      * Requirements: token fo _vaultId must not exists.
      */
-    function newVaultToken(uint256 _vaultId) external;
+    // private function newVaultToken(uint256 vaultId) external;
 
-    /**
-     * @dev Returns the amount of tokens owned by '_address'.
-     */
-    function userBalance(address _address) external view returns(uint256);
 
-    /**
-     * @dev Returns the amount of tokens of token type '_vaultId' owned by '_address'.
-     */
-    function userBalanceOfVault(
-        address _address,
-        uint256 _vaultId
-    ) external view returns(uint256);
+
+
+
 
 
     /**
-     * @dev Returns the amounts of tokens of token types '_vaultIds' owned by '_address'.
-     * 
+     * @dev Returns the amount of tokens owned by `account`.
      */
-    function userBalanceOfBatch(
-        address _address, 
-        uint256[] calldata vaultIds
-    ) external view returns(uint256[] memory);
+    function balanceOf(address account) external view returns (uint256);//@duplicated w/ IERC20
 
 
+
+
+
+
+
+    /**
+     * @dev Returns the amount of tokens of token type `id` owned by `account`.
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     */
+    function balanceOf(address account, uint256 vaultId) external view returns (uint256);//@duplicated w/ IERC1155
+
+
+
+
+
+    /**
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}.
+     *
+     * Requirements:
+     *
+     * - `accounts` and `ids` must have the same length.
+     */
+    function balanceOfBatch(address[] calldata accounts, uint256[] calldata vaultIds)
+        external
+        view
+        returns (uint256[] memory);//@duplicated w/ IERC1155
+
+
+
+
+    
     /**
      * @dev Returns the total minted amount of token type '_vaultId'.
      * 
      */
-    function vaultTokenTotalSupply(uint256 _vaultId) external view returns(uint256);
+    function totalSupplyInVault(uint256 vaultId) external view returns(uint256);
+
+
+
 
 
     /**
@@ -47,48 +73,84 @@ interface IAtcgu{
      * Requirements:
      * - tokens fo type '_vaultId' must exists.
      */
-    function mint(
-        uint256 _vaultId,
-        address _to,
-        uint256 _amount
-    ) external returns(bool);
+     //private
+    function mint(//private!!!!
+        uint256 vaultId,
+        address to,
+        uint256 amount
+    ) external returns(bool);//private!!!!
+
+
+
 
     /**
-     * @dev transfers `_amount` tokens of token type `_vaultId` from msg.sender to `_to`,
-     * 
+     * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
+     *
+     * Emits a {TransferSingle} event.
+     *
      * Requirements:
-     * - tokens fo type '_vaultId' must exists.
+     *
+     * - `to` cannot be the zero address.
+     * - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via {setApprovalForAll}.
+     * - `from` must have a balance of tokens of type `id` of at least `amount`.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * acceptance magic value.
      */
-    function transferByVault(
-        uint256 _vaultId,
-        address _to, 
-        uint256 _amount
-    ) external returns(bool);
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 vaultId,
+        uint256 amount,
+        bytes calldata data
+    ) external;//@duplicated w/ IERC1155
      
 
-    /**
-     * @dev transfers `_amounts` tokens of token type `_vaultIds` from msg.sender to `_to`.
-     * 
-     * Requirements:
-     * - tokens fo type '_vaultId' must exists.
-     * - `_vaultIds` and `_amounts` must have the same length.
-     */
-    function transferBatch(
-        uint256[] calldata _vaultIds,
-        address _to,
-        uint256[] calldata _amounts
-    ) external returns(bool); 
+
+
+
 
     /**
-     * @dev TBA
+     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}.
+     *
+     * Emits a {TransferBatch} event.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+     * acceptance magic value.
      */
-    function transfer(
-        address _to,
-        uint256 _amount
-    ) external returns(bool);
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] calldata vaultIds,
+        uint256[] calldata amounts,
+        bytes calldata data
+    ) external;//@duplicated w/ IERC1155
+
+
+
+
+
+
+
+    /**
+     * @dev Moves `amount` tokens from the caller's account to `to`.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a {Transfer} event.
+     */
+    function transfer(address to, uint256 amount) external returns (bool);//@duplicated w/ IERC20
+
+
+
+
+
+
 
     /**
      * @dev Returns the existence of token type '_vaultId'.
      */
-    function exists(uint256 _vaultId) external returns(bool);
+    function doesVaultExist(uint256 vaultId) external returns(bool);
 }
