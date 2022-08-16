@@ -38,7 +38,7 @@ interface IAtcgu{
      * @dev Returns the total minted amount of token type '_vaultId'.
      * 
      */
-    function vaultTokenTotalSupply(uint256 _vaultId) external returns(uint256);
+    function vaultTokenTotalSupply(uint256 _vaultId) external view returns(uint256);
 
 
     /**
@@ -63,7 +63,7 @@ interface IAtcgu{
         uint256 _vaultId,
         address _to, 
         uint256 _amount
-    ) external;
+    ) external returns(bool);
      
 
     /**
@@ -77,7 +77,7 @@ interface IAtcgu{
         uint256[] calldata _vaultIds,
         address _to,
         uint256[] calldata _amounts
-    ) external;
+    ) external returns(bool); 
 
     /**
      * @dev TBA
@@ -85,7 +85,7 @@ interface IAtcgu{
     function transfer(
         address _to,
         uint256 _amount
-    ) external;
+    ) external returns(bool);
 
     /**
      * @dev Returns the existence of token type '_vaultId'.
