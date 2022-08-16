@@ -4,3 +4,5 @@ fuck.sh
 *.backup
 *.cache
 *.tmp
+
+.DS_Store
